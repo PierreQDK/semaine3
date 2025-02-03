@@ -26,7 +26,7 @@ data_exercice<- read.table(
   quote = ""
 )
 
-#View(data_exercice)
+View(data_exercice)
 
 
 #----- Modifier les formats (lorsque nécessaire) -----
@@ -60,10 +60,7 @@ df_list <- list(df_Nantes, df_Faverelles, df_Loire_Atlantique, df_Gers)
 
 #----- Vérifier le dataframe -----
 
-## Pour la suite, les fonctions prendront en entrée des dataframe. Pour être
-## certains qu'ils ont la bonne forme, on crée une fonction qui vérifie cela et
-## qui, dans le cas où le df serait mal construit, retourne une erreur pour nous
-## avertir.
+## Pour la suite, les fonctions prendront en entrée des dataframe. Pour être certains qu'ils ont la bonne forme, on crée une fonction qui vérifie cela et qui, dans le cas où le df serait mal construit, retourne une erreur pour nous avertir.
 
 validate_schema <- function(df) {
   schema <- c(
@@ -88,40 +85,11 @@ validate_schema <- function(df) {
 }
 
 
-## Exemples :
-##    - Valide
-##        validate_schema(df_Gers)
-##    - Non valide
-##        validate_schema(df_Gers[,-1])
-
 
 
 #----- Créer la fonction -----
 
-#--- Code Djayan ---
 
-compter_nombre_d_elus <- function(df){
-  
-  # Créer une nouvelle colonne combinant les trois variables
-  
-  df$triplet <- paste(df$Nom.de.l.élu, df$Prénom.de.l.élu, df$Date.de.naissance)
-  
-  # Vérifier si le triplet est unique (c'est-à-dire sans doublons)
-  
-  unique_triplets <- df[!duplicated(df$triplet), ]
-  
-  # Compter le nombre de triplets uniques
-  
-  count = nrow(unique_triplets)
-  
-  return(count)
-}
-
-compter_nombre_d_elus(df_Nantes)
-
-
-
-#--- Code Corrigé ---
 
 compter_nombre_d_elus_corr <- function(df) {
   # Vérifier le schéma
@@ -146,23 +114,6 @@ sapply(df_list, compter_nombre_d_elus_corr)
 
 #---------- QUESTION 4 ----------
 
-#--- Code Djayan ---
-
-compter_nombre_d_adjoints <- function(df) {
-  
-  count <- grepl("adjoint", df$Libellé.de.la.fonction, ignore.case = TRUE) |>
-    sum()
-  
-  return(count)
-  
-}
-
-
-lapply(df_list, compter_nombre_d_adjoints)
-
-
-
-#--- Code Corrigé ---
 
 compter_nombre_d_adjoints_corr <- function(df) {
   
@@ -183,34 +134,8 @@ sapply(df_list, compter_nombre_d_adjoints_corr)
 #---------- QUESTION 5 ----------
 
 
-#--- Code Djayan ---
 
-trouver_l_elu_le_plus_age_1 <- function(df) {
-  
-  # Trier le dataframe par date de naissance (plus ancien en premier)
-  df <- df[order(df$Date.de.naissance), ]
-  
-  # Sélectionner l'élu le plus âgé (première ligne après tri)
-  elu_le_plus_age <- df[1, ]
-  
-  # Calculer son âge
-  age <- as.period(interval(elu_le_plus_age$Date.de.naissance, today()),
-                   unit = "years")$year
-  
-  # Retourner les informations
-  return(cat("L'élu le plus âgé est :",
-             elu_le_plus_age$Nom.de.l.élu,
-             elu_le_plus_age$Prénom.de.l.élu,
-             "avec un âge de", age, "ans.\n"))
-}
-
-lapply(df_list, trouver_l_elu_le_plus_age_1)
-
-
-
-#--- Code Djayan 2 ---
-
-trouver_l_elu_le_plus_age_2 <- function(df) {
+trouver_l_elu_le_plus_age_ <- function(df) {
   
   validate_schema(df)
   
@@ -227,7 +152,7 @@ trouver_l_elu_le_plus_age_2 <- function(df) {
   
 }
 
-sapply(df_list, trouver_l_elu_le_plus_age_2)
+sapply(df_list, trouver_l_elu_le_plus_age_)
 
 
 
@@ -236,8 +161,7 @@ sapply(df_list, trouver_l_elu_le_plus_age_2)
 #---------- QUESTION 6 ----------
 
 calcul_distribution_age <- function(df) {
-  
-  #validate_schema(df) retirer la vérification car sinon pose problème pour la suite (Q9)
+
   
   # Calcul des âges en années
   ages <- as.period(interval(df$Date.de.naissance, today()),
@@ -279,8 +203,7 @@ plot_code_professions <- function(df){
   
 }
 
-lapply(df_list, plot_code_professions) |>
-  invisible()   # évite l'affichage de [[1]], [[2]], etc.
+lapply(df_list, plot_code_professions) 
 
 
 
@@ -327,8 +250,7 @@ summary.commune <- function(x){
   )
 }
 
-lapply(list(df_Nantes, df_Faverelles), summary.commune) |>
-  invisible()
+lapply(list(df_Nantes, df_Faverelles), summary.commune)
 
 
 
